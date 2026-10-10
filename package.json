@@ -1,0 +1,20 @@
+{
+  "name": "@codewarstools/codewars-solutions-scraper",
+  "version": "1.0.0",
+  "description": "Scrape Codewars solutions from multiple URLs using Puppeteer.",
+  "type": "module",
+  "exports": "./src/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^24.0.0"
+  }
+}
