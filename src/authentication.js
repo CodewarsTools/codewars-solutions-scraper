@@ -1,7 +1,14 @@
+import {
+  ERROR_CODES,
+  createScraperError,
+} from './errors/index.js';
 
 export async function authenticate(page, token) {
-  if (!token) {
-    return;
+  if (typeof token !== 'string' || !token.trim()) {
+    throw createScraperError(
+      ERROR_CODES.AUTHENTICATION_REQUIRED,
+      'Authentication is required. Provide a valid remember_user_token.',
+    );
   }
 
   await page.setCookie({

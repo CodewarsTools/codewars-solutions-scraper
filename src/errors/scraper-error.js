@@ -1,13 +1,12 @@
-
 export class ScraperError extends Error {
-  constructor(code, message, options = {}) {
-    super(message, options);
+  constructor({ code, message, cause } = {}) {
+    super(message, { cause });
 
     this.name = 'ScraperError';
     this.code = code;
   }
 }
 
-export function createScraperError(code, message, options = {}) {
-  return new ScraperError(code, message, options);
+export function createScraperError(options) {
+  return new ScraperError(options);
 }

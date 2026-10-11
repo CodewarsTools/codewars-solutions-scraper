@@ -13,20 +13,21 @@ export async function getSolution(page, url) {
       timeout: 30_000,
     });
   } catch (cause) {
-    throw createScraperError(
-      ERROR_CODES.NAVIGATION_FAILED,
-      'Failed to navigate to the solution page',
-      { cause },
-    );
+    throw createScraperError({
+      code: ERROR_CODES.NAVIGATION_FAILED,
+      message: 'Failed to navigate to the solution page',
+      cause,
+    });
   }
 
   const solutionsLocked = await page.$(SOLUTIONS_LOCKED_SELECTOR);
 
   if (solutionsLocked) {
-    throw createScraperError(
-      ERROR_CODES.SOLUTIONS_LOCKED,
-      'Solutions are locked. This may be because you have not solved this kata yet. Unlocking the solutions will forfeit your eligibility for this kata.',
-    );
+    throw createScraperError({
+      code: ERROR_CODES.SOLUTIONS_LOCKED,
+      message:
+        'Solutions are locked. This may be because you have not solved this kata yet. Unlocking the solutions will forfeit your eligibility for this kata.',
+    });
   }
 
   try {
@@ -38,11 +39,11 @@ export async function getSolution(page, url) {
       throw cause;
     }
 
-    throw createScraperError(
-      ERROR_CODES.SOLUTION_NOT_FOUND,
-      'Solution not found',
-      { cause },
-    );
+    throw createScraperError({
+      code: ERROR_CODES.SOLUTION_NOT_FOUND,
+      message: 'Solution not found',
+      cause,
+    });
   }
 
   return page.$eval(

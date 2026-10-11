@@ -1,4 +1,3 @@
-
 import {
   ERROR_CODES,
   createScraperError,
@@ -9,10 +8,10 @@ const SOLUTION_URL_PATTERN =
 
 export function parseSolutionUrl(value) {
   if (typeof value !== 'string') {
-    throw createScraperError(
-      ERROR_CODES.INVALID_URL,
-      'URL must be a string',
-    );
+    throw createScraperError({
+      code: ERROR_CODES.INVALID_URL,
+      message: 'URL must be a string',
+    });
   }
 
   let url;
@@ -20,30 +19,30 @@ export function parseSolutionUrl(value) {
   try {
     url = new URL(value);
   } catch (cause) {
-    throw createScraperError(
-      ERROR_CODES.INVALID_URL,
-      'Invalid URL format',
-      { cause },
-    );
+    throw createScraperError({
+      code: ERROR_CODES.INVALID_URL,
+      message: 'Invalid URL format',
+      cause,
+    });
   }
 
   if (
     url.protocol !== 'https:' ||
     url.hostname !== 'www.codewars.com'
   ) {
-    throw createScraperError(
-      ERROR_CODES.INVALID_URL,
-      'URL must belong to https://www.codewars.com',
-    );
+    throw createScraperError({
+      code: ERROR_CODES.INVALID_URL,
+      message: 'URL must belong to https://www.codewars.com',
+    });
   }
 
   const match = url.pathname.match(SOLUTION_URL_PATTERN);
 
   if (!match) {
-    throw createScraperError(
-      ERROR_CODES.INVALID_URL,
-      'Invalid Codewars solution URL',
-    );
+    throw createScraperError({
+      code: ERROR_CODES.INVALID_URL,
+      message: 'Invalid Codewars solution URL',
+    });
   }
 
   return {

@@ -19,7 +19,7 @@ async function processUrl(page, value) {
   try {
     metadata = parseSolutionUrl(value);
 
-    const solution = await getSolution(page, value);
+    const solution = await getSolution(page, url);
 
     return {
       url,
@@ -57,9 +57,32 @@ export async function getSolutions(urls, options = {}) {
 
     try {
       await authenticate(page, options.rememberUserToken);
-    } catch (cause) {
-      throw new Error('Failed to authenticate with Codewars', {
-        cause,
+    } catch (error) {
+      const authError = createErrorResult(error);
+
+      return urls.map((value) => {
+        const url = typeof value === 'string'
+          ? value
+          : String(value);
+
+        let metadata = {
+          kataId: null,
+          language: null,
+        };
+
+        try {
+          metadata = parseSolutionUrl(value);
+        } catch {
+          // Keep default metadata for invalid URLs.
+        }
+
+        return {
+          url,
+          ...metadata,
+          success: false,
+          data: null,
+          error: authError,
+        };
       });
     }
 
