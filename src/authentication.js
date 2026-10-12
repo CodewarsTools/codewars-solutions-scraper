@@ -5,10 +5,10 @@ import {
 
 export async function authenticate(page, token) {
   if (typeof token !== 'string' || !token.trim()) {
-    throw createScraperError(
-      ERROR_CODES.AUTHENTICATION_REQUIRED,
-      'Authentication is required. Provide a valid remember_user_token.',
-    );
+    throw createScraperError({
+      code: ERROR_CODES.AUTHENTICATION_REQUIRED,
+      message: 'Authentication is required. Provide a valid remember_user_token.',
+    });
   }
 
   await page.setCookie({
