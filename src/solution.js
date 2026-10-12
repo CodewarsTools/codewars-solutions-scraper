@@ -1,4 +1,4 @@
-import { ERROR_CODES, createScraperError } from "./errors/index.js";
+import { ERROR_CODES, createScraperError } from "./errors.js";
 
 import { SOLUTION_SELECTOR, SOLUTIONS_LOCKED_SELECTOR } from "./selectors.js";
 

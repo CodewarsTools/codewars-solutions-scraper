@@ -9,4 +9,4 @@ export {
   ScraperError,
   createScraperError,
   createErrorResult,
-} from './errors/index.js';
+} from './errors.js';

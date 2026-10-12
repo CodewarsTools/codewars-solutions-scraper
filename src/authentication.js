@@ -1,7 +1,7 @@
 import {
   ERROR_CODES,
   createScraperError,
-} from './errors/index.js';
+} from './errors.js';
 
 export async function authenticate(page, token) {
   if (typeof token !== 'string' || !token.trim()) {

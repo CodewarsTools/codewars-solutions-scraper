@@ -1,7 +1,7 @@
 import {
   ERROR_CODES,
   createScraperError,
-} from './errors/index.js';
+} from './errors.js';
 
 const SOLUTION_URL_PATTERN =
   /^\/kata\/([a-f\d]{24})\/solutions\/([a-z\d-]+)\/?$/i;
