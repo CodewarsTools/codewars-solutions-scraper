@@ -2,6 +2,12 @@ import { ERROR_CODES, createScraperError } from "./errors/index.js";
 
 import { SOLUTION_SELECTOR, SOLUTIONS_LOCKED_SELECTOR } from "./selectors.js";
 
+const {
+  NAVIGATION_FAILED,
+  SOLUTIONS_LOCKED,
+  SOLUTION_NOT_FOUND,
+} = ERROR_CODES;
+
 export async function getSolution(page, url) {
   try {
     await page.goto(url, {
@@ -10,7 +16,7 @@ export async function getSolution(page, url) {
     });
   } catch (cause) {
     throw createScraperError({
-      code: ERROR_CODES.NAVIGATION_FAILED,
+      code: NAVIGATION_FAILED,
       message: "Failed to navigate to the solution page",
       cause,
     });
@@ -20,7 +26,7 @@ export async function getSolution(page, url) {
 
   if (solutionsLocked) {
     throw createScraperError({
-      code: ERROR_CODES.SOLUTIONS_LOCKED,
+      code: SOLUTIONS_LOCKED,
       message:
         "Solutions are locked. This may be because you have not solved this kata yet. Unlocking the solutions will forfeit your eligibility for this kata.",
     });
@@ -36,7 +42,7 @@ export async function getSolution(page, url) {
     }
 
     throw createScraperError({
-      code: ERROR_CODES.SOLUTION_NOT_FOUND,
+      code: SOLUTION_NOT_FOUND,
       message: "Solution not found",
       cause,
     });
