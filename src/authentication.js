@@ -1,14 +1,11 @@
 import {
   ERROR_CODES,
-  createScraperError,
+  createAuthenticationRequiredError,
 } from './errors.js';
 
 export async function authenticate(page, token) {
   if (typeof token !== 'string' || !token.trim()) {
-    throw createScraperError({
-      code: ERROR_CODES.AUTHENTICATION_REQUIRED,
-      message: 'Authentication is required. Provide a valid remember_user_token.',
-    });
+    throw createAuthenticationRequiredError();
   }
 
   await page.setCookie({

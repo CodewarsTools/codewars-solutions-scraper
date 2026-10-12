@@ -22,6 +22,13 @@ export function createScraperError(options) {
   return new ScraperError(options);
 }
 
+export function createAuthenticationRequiredError() {
+  return createScraperError({
+    code: ERROR_CODES.AUTHENTICATION_REQUIRED,
+    message: 'Authentication is required. Provide a valid remember_user_token.',
+  });
+}
+
 export function createErrorResult(error) {
   if (error instanceof ScraperError) {
     return {
