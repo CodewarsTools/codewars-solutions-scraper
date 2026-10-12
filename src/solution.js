@@ -1,11 +1,12 @@
 import { ERROR_CODES, createScraperError } from "./errors.js";
 
-import { SOLUTION_SELECTOR, SOLUTIONS_LOCKED_SELECTOR } from "./selectors.js";
+import { SOLUTION_SELECTOR, SOLUTIONS_LOCKED_SELECTOR, SIGN_IN_SELECTOR } from "./selectors.js";
 
 const {
   NAVIGATION_FAILED,
   SOLUTIONS_LOCKED,
   SOLUTION_NOT_FOUND,
+  AUTHENTICATION_FAILED,
 } = ERROR_CODES;
 
 export async function getSolution(page, url) {
@@ -19,6 +20,15 @@ export async function getSolution(page, url) {
       code: NAVIGATION_FAILED,
       message: "Failed to navigate to the solution page",
       cause,
+    });
+  }
+
+  const authenticationFailed = await page.$(SIGN_IN_SELECTOR);
+
+  if (authenticationFailed) {
+    throw createScraperError({
+      code: AUTHENTICATION_FAILED,
+      message: "Authentication failed. Check your remember_user_token.",
     });
   }
 

@@ -25,7 +25,16 @@ export function createScraperError(options) {
 export function createAuthenticationRequiredError() {
   return createScraperError({
     code: ERROR_CODES.AUTHENTICATION_REQUIRED,
-    message: 'Authentication is required. Provide a valid remember_user_token.',
+    message:
+      'Authentication is required. Provide a valid remember_user_token.',
+  });
+}
+
+export function createAuthenticationFailedError(cause) {
+  return createScraperError({
+    code: ERROR_CODES.AUTHENTICATION_FAILED,
+    message: 'Authentication failed. Check your remember_user_token.',
+    cause,
   });
 }
 
