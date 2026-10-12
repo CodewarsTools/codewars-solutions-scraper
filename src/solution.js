@@ -1,21 +1,17 @@
-import {
-  ERROR_CODES,
-  createScraperError,
-} from './errors/index.js';
+import { ERROR_CODES, createScraperError } from "./errors/index.js";
 
-const SOLUTION_SELECTOR = '#solutions_list pre code';
-const SOLUTIONS_LOCKED_SELECTOR = '.js-unlock-solutions';
+import { SOLUTION_SELECTOR, SOLUTIONS_LOCKED_SELECTOR } from "./selectors.js";
 
 export async function getSolution(page, url) {
   try {
     await page.goto(url, {
-      waitUntil: 'domcontentloaded',
+      waitUntil: "domcontentloaded",
       timeout: 30_000,
     });
   } catch (cause) {
     throw createScraperError({
       code: ERROR_CODES.NAVIGATION_FAILED,
-      message: 'Failed to navigate to the solution page',
+      message: "Failed to navigate to the solution page",
       cause,
     });
   }
@@ -26,7 +22,7 @@ export async function getSolution(page, url) {
     throw createScraperError({
       code: ERROR_CODES.SOLUTIONS_LOCKED,
       message:
-        'Solutions are locked. This may be because you have not solved this kata yet. Unlocking the solutions will forfeit your eligibility for this kata.',
+        "Solutions are locked. This may be because you have not solved this kata yet. Unlocking the solutions will forfeit your eligibility for this kata.",
     });
   }
 
@@ -35,19 +31,16 @@ export async function getSolution(page, url) {
       timeout: 10_000,
     });
   } catch (cause) {
-    if (cause?.name !== 'TimeoutError') {
+    if (cause?.name !== "TimeoutError") {
       throw cause;
     }
 
     throw createScraperError({
       code: ERROR_CODES.SOLUTION_NOT_FOUND,
-      message: 'Solution not found',
+      message: "Solution not found",
       cause,
     });
   }
 
-  return page.$eval(
-    SOLUTION_SELECTOR,
-    (element) => element.textContent,
-  );
+  return page.$eval(SOLUTION_SELECTOR, (element) => element.textContent);
 }
