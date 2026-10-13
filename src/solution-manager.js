@@ -1,10 +1,8 @@
-import {
-  launchBrowser,
-  authenticate,
-  getSolution,
-  parseSolutionUrl,
-  createErrorResult,
-} from './internal.js';
+import { launchBrowser } from './browser.js';
+import { authenticate } from './authentication.js';
+import { getSolution } from './solution.js';
+import { parseSolutionUrl } from './url-utils.js';
+import { createErrorResult } from './errors.js';
 
 async function processUrl(page, value) {
   const url = typeof value === 'string'
