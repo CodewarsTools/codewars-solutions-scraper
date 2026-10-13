@@ -5,11 +5,15 @@ export const createSolutionResult = ({
   success = false,
   data = [],
   error = [],
-} = {}) => ({
-  url,
-  kataId,
-  language,
-  success,
-  data,
-  error,
-});
+} = {}) => { 
+  return Object.preventExtensions(
+    Object.assign(Object.create(null), {
+      url,
+      kataId,
+      language,
+      success,
+      data,
+      error,
+    }),
+  );
+};
