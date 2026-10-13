@@ -1,7 +1,5 @@
-import {
-  ERROR_CODES,
-  createAuthenticationRequiredError,
-} from './errors.js';
+import { createAuthenticationRequiredError } from './errors.js';
+import { AUTH_COOKIE } from './constants.js';
 
 export async function authenticate(page, token) {
   if (typeof token !== 'string' || !token.trim()) {
@@ -9,10 +7,7 @@ export async function authenticate(page, token) {
   }
 
   await page.setCookie({
-    name: 'remember_user_token',
+    ...AUTH_COOKIE,
     value: token,
-    domain: 'www.codewars.com',
-    path: '/',
-    secure: true,
   });
 }
