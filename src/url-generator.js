@@ -1,4 +1,8 @@
-export function createUrlGenerator({ BASE_URL }) {
+export function createUrlGenerator({ BASE_URL, SUPORT_LANGUAGES }) {
+  function isSupportedLanguage(language) {
+    return SUPORT_LANGUAGES.includes(language);
+  }
+
   return function buildSolutionUrls(items) {
     if (!Array.isArray(items)) {
       throw new TypeError('Items must be an array');
@@ -25,6 +29,10 @@ export function createUrlGenerator({ BASE_URL }) {
         throw new TypeError(
           'Invalid language: expected a non-empty string',
         );
+      }
+
+      if (!isSupportedLanguage(language)) {
+        throw new RangeError(`Unsupported language: ${language}`);
       }
 
       return `${BASE_URL}/kata/${kataId}/solutions/${language}?filter=me`;

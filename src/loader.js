@@ -1,3 +1,5 @@
+import LANGUAGES from '@codewarstools/codewars-languages';
+
 import * as constants from './constants.js';
 import * as errors from './errors.js';
 import * as selectors from './selectors.js';
@@ -22,6 +24,7 @@ const getSolution = createSolution({
 
 const buildSolutionUrls = createUrlGenerator({
   BASE_URL: constants.BASE_URL,
+  SUPORT_LANGUAGES: LANGUAGES,
 });
 
 export const getSolutions = createSolutionManager({
