@@ -1,27 +1,19 @@
 import { launchBrowser } from './browser.js';
 import { authenticate } from './authentication.js';
 import { getSolution } from './solution.js';
-import { parseSolutionUrl } from './url-utils.js';
+import { buildSolutionUrls } from './url-generator.js';
 import { createErrorResult } from './errors.js';
 
-async function processUrl(page, value) {
-  const url = typeof value === 'string'
-    ? value
-    : String(value);
-
-  let metadata = {
-    kataId: null,
-    language: null,
-  };
+async function processUrl(page, item, url) {
+  const { kataId, language } = item;
 
   try {
-    metadata = parseSolutionUrl(value);
-
     const solution = await getSolution(page, url);
 
     return {
       url,
-      ...metadata,
+      kataId,
+      language,
       success: true,
       data: {
         solution,
@@ -31,7 +23,8 @@ async function processUrl(page, value) {
   } catch (error) {
     return {
       url,
-      ...metadata,
+      kataId,
+      language,
       success: false,
       data: null,
       error: createErrorResult(error),
@@ -39,15 +32,16 @@ async function processUrl(page, value) {
   }
 }
 
-export async function getSolutions(urls, options = {}) {
-  if (!Array.isArray(urls)) {
-    throw new TypeError('URLs must be an array');
+export async function getSolutions(items, options = {}) {
+  if (!Array.isArray(items)) {
+    throw new TypeError('Items must be an array');
   }
 
-  if (urls.length === 0) {
+  if (items.length === 0) {
     return [];
   }
 
+  const urls = buildSolutionUrls(items);
   const browser = await launchBrowser(options.browser);
 
   try {
@@ -58,36 +52,22 @@ export async function getSolutions(urls, options = {}) {
     } catch (error) {
       const authError = createErrorResult(error);
 
-      return urls.map((value) => {
-        const url = typeof value === 'string'
-          ? value
-          : String(value);
-
-        let metadata = {
-          kataId: null,
-          language: null,
-        };
-
-        try {
-          metadata = parseSolutionUrl(value);
-        } catch {
-          // Keep default metadata for invalid URLs.
-        }
-
-        return {
-          url,
-          ...metadata,
-          success: false,
-          data: null,
-          error: authError,
-        };
-      });
+      return items.map((item, index) => ({
+        url: urls[index],
+        kataId: item.kataId,
+        language: item.language,
+        success: false,
+        data: null,
+        error: authError,
+      }));
     }
 
     const results = [];
 
-    for (const url of urls) {
-      results.push(await processUrl(page, url));
+    for (let index = 0; index < items.length; index++) {
+      results.push(
+        await processUrl(page, items[index], urls[index]),
+      );
     }
 
     return results;
