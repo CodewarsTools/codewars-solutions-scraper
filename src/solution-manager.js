@@ -4,32 +4,25 @@ export function createSolutionManager({
   getSolution,
   buildSolutionUrls,
   createErrorResult,
+  createSolutionResult,
 }) {
-  async function processUrl(page, item, url) {
-    const { kataId, language } = item;
-
+  async function processUrl(page, item) {
     try {
-      const solution = await getSolution(page, url);
+      const solution = await getSolution(page, item.url);
 
-      return {
-        url,
-        kataId,
-        language,
+      return createSolutionResult({
+        ...item,
         success: true,
-        data: {
-          solution,
-        },
-        error: null,
-      };
+        data: [solution],
+        error: [],
+      });
     } catch (error) {
-      return {
-        url,
-        kataId,
-        language,
+      return createSolutionResult({
+        ...item,
         success: false,
-        data: null,
-        error: createErrorResult(error),
-      };
+        data: [],
+        error: [createErrorResult(error)],
+      });
     }
   }
 
@@ -42,7 +35,16 @@ export function createSolutionManager({
       return [];
     }
 
-    const urls = buildSolutionUrls(items);
+    const results = buildSolutionUrls(items);
+
+    const hasValidResults = results.some(
+      (result) => result.url && result.error.length === 0,
+    );
+
+    if (!hasValidResults) {
+      return results;
+    }
+
     const browser = await launchBrowser(options.browser);
 
     try {
@@ -53,25 +55,32 @@ export function createSolutionManager({
       } catch (error) {
         const authError = createErrorResult(error);
 
-        return items.map((item, index) => ({
-          url: urls[index],
-          kataId: item.kataId,
-          language: item.language,
-          success: false,
-          data: null,
-          error: authError,
-        }));
+        return results.map((result) => {
+          if (!result.url || result.error.length > 0) {
+            return result;
+          }
+
+          return createSolutionResult({
+            ...result,
+            success: false,
+            data: [],
+            error: [{ ...authError }],
+          });
+        });
       }
 
-      const results = [];
+      const processedResults = [];
 
-      for (let index = 0; index < items.length; index++) {
-        results.push(
-          await processUrl(page, items[index], urls[index]),
-        );
+      for (const result of results) {
+        if (!result.url || result.error.length > 0) {
+          processedResults.push(result);
+          continue;
+        }
+
+        processedResults.push(await processUrl(page, result));
       }
 
-      return results;
+      return processedResults;
     } finally {
       await browser.close();
     }

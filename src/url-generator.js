@@ -1,14 +1,12 @@
-export function createUrlGenerator({ BASE_URL, SUPORT_LANGUAGES }) {
-  function isSupportedLanguage(language) {
-    return SUPORT_LANGUAGES.includes(language);
-  }
+export function createUrlGenerator({
+  BASE_URL,
+  SUPORT_LANGUAGES,
+  createSolutionResult,
+}) {
+  function buildSolutionUrl(item) {
+    const result = createSolutionResult();
 
-  return function buildSolutionUrls(items) {
-    if (!Array.isArray(items)) {
-      throw new TypeError('Items must be an array');
-    }
-
-    return items.map((item) => {
+    try {
       if (
         typeof item !== 'object' ||
         item === null ||
@@ -18,6 +16,14 @@ export function createUrlGenerator({ BASE_URL, SUPORT_LANGUAGES }) {
       }
 
       const { kataId, language } = item;
+
+      if (typeof kataId === 'string' && kataId.trim()) {
+        result.kataId = kataId;
+      }
+
+      if (typeof language === 'string') {
+        result.language = language;
+      }
 
       if (typeof kataId !== 'string' || !kataId.trim()) {
         throw new TypeError(
@@ -31,11 +37,32 @@ export function createUrlGenerator({ BASE_URL, SUPORT_LANGUAGES }) {
         );
       }
 
-      if (!isSupportedLanguage(language)) {
-        throw new RangeError(`Unsupported language: ${language}`);
+      if (!SUPORT_LANGUAGES.includes(language)) {
+        const error = new RangeError(
+          `Unsupported language: ${language}`,
+        );
+
+        error.code = 'UNSUPPORTED_LANGUAGE';
+        throw error;
       }
 
-      return `${BASE_URL}/kata/${kataId}/solutions/${language}?filter=me`;
-    });
+      result.url =
+        `${BASE_URL}/kata/${kataId}/solutions/${language}?filter=me`;
+    } catch (error) {
+      result.error.push({
+        code: error.code ?? 'INVALID_INPUT',
+        message: error.message,
+      });
+    }
+
+    return result;
+  }
+
+  return function buildSolutionUrls(items) {
+    if (!Array.isArray(items)) {
+      throw new TypeError('Items must be an array');
+    }
+
+    return items.map(buildSolutionUrl);
   };
 }

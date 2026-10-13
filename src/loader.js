@@ -3,6 +3,7 @@ import LANGUAGES from '@codewarstools/codewars-languages';
 import * as constants from './constants.js';
 import * as errors from './errors.js';
 import * as selectors from './selectors.js';
+import * as solutionResult from './solution-result.js';
 
 import { launchBrowser } from './browser.js';
 import { createAuthentication } from './authentication.js';
@@ -22,9 +23,12 @@ const getSolution = createSolution({
   ...selectors,
 });
 
+const createSolutionResult = solutionResult.createSolutionResult;
+
 const buildSolutionUrls = createUrlGenerator({
   BASE_URL: constants.BASE_URL,
   SUPORT_LANGUAGES: LANGUAGES,
+  createSolutionResult,
 });
 
 export const getSolutions = createSolutionManager({
@@ -33,4 +37,5 @@ export const getSolutions = createSolutionManager({
   getSolution,
   buildSolutionUrls,
   createErrorResult: errors.createErrorResult,
+  createSolutionResult,
 });
