@@ -1,14 +1,14 @@
-export function createAuthentication({
+export const createAuthentication = ({
   createAuthenticationRequiredError,
   AUTH_COOKIE,
-}) {
-  function validateToken(token) {
+}) => {
+  const validateToken = (token) => {
     if (typeof token !== 'string' || !token.trim()) {
       throw createAuthenticationRequiredError();
     }
-  }
+  };
 
-  return async function authenticate(page, token) {
+  const authenticate = async (page, token) => {
     validateToken(token);
 
     await page.setCookie({
@@ -16,4 +16,6 @@ export function createAuthentication({
       value: token,
     });
   };
-}
+
+  return authenticate;
+};

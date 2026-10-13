@@ -27,7 +27,7 @@ const createSolutionResult = solutionResult.createSolutionResult;
 
 const buildSolutionUrls = createUrlGenerator({
   BASE_URL: constants.BASE_URL,
-  SUPORT_LANGUAGES: LANGUAGES,
+  SUPPORTED_LANGUAGES: LANGUAGES,
   createSolutionResult,
 });
 

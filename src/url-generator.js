@@ -1,9 +1,9 @@
-export function createUrlGenerator({
+export const createUrlGenerator = ({
   BASE_URL,
-  SUPORT_LANGUAGES,
+  SUPPORTED_LANGUAGES,
   createSolutionResult,
-}) {
-  function buildSolutionUrl(item) {
+}) => {
+  const buildSolutionUrl = (item) => {
     const result = createSolutionResult();
 
     try {
@@ -37,7 +37,7 @@ export function createUrlGenerator({
         );
       }
 
-      if (!SUPORT_LANGUAGES.includes(language)) {
+      if (!SUPPORTED_LANGUAGES.includes(language)) {
         const error = new RangeError(
           `Unsupported language: ${language}`,
         );
@@ -56,13 +56,16 @@ export function createUrlGenerator({
     }
 
     return result;
-  }
+  };
 
-  return function buildSolutionUrls(items) {
+  const buildSolutionUrls = (items) => {
     if (!Array.isArray(items)) {
       throw new TypeError('Items must be an array');
     }
 
     return items.map(buildSolutionUrl);
   };
-}
+  
+  return buildSolutionUrls;
+
+};

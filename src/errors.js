@@ -18,27 +18,27 @@ export class ScraperError extends Error {
   }
 }
 
-export function createScraperError(options) {
+export const createScraperError = (options) => {
   return new ScraperError(options);
-}
+};
 
-export function createAuthenticationRequiredError() {
+export const createAuthenticationRequiredError = () => {
   return createScraperError({
     code: ERROR_CODES.AUTHENTICATION_REQUIRED,
     message:
       'Authentication is required. Provide a valid remember_user_token.',
   });
-}
+};
 
-export function createAuthenticationFailedError(cause) {
+export const createAuthenticationFailedError = (cause) => {
   return createScraperError({
     code: ERROR_CODES.AUTHENTICATION_FAILED,
     message: 'Authentication failed. Check your remember_user_token.',
     cause,
   });
-}
+};
 
-export function createErrorResult(error) {
+export const createErrorResult = (error) => {
   if (error instanceof ScraperError) {
     return {
       code: error.code,
@@ -59,4 +59,4 @@ export function createErrorResult(error) {
       ? error.message
       : String(error),
   };
-}
+};

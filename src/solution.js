@@ -1,11 +1,11 @@
-export function createSolution({
+export const createSolution = ({
   ERROR_CODES,
   createScraperError,
   SOLUTION_SELECTOR,
   SOLUTIONS_LOCKED_SELECTOR,
   SIGN_IN_SELECTOR,
-}) {
-  return async function getSolution(page, url) {
+}) => {
+  const getSolution = async (page, url) => {
     try {
       await page.goto(url, {
         waitUntil: 'domcontentloaded',
@@ -52,4 +52,6 @@ export function createSolution({
 
     return page.$eval(SOLUTION_SELECTOR, (element) => element.textContent);
   };
-}
+
+  return getSolution;
+};

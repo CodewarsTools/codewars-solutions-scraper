@@ -1,12 +1,12 @@
-export function createSolutionManager({
+export const createSolutionManager = ({
   launchBrowser,
   authenticate,
   getSolution,
   buildSolutionUrls,
   createErrorResult,
   createSolutionResult,
-}) {
-  async function processUrl(page, item) {
+}) => {
+  const processUrl = async (page, item) => {
     try {
       const solution = await getSolution(page, item.url);
 
@@ -24,9 +24,9 @@ export function createSolutionManager({
         error: [createErrorResult(error)],
       });
     }
-  }
+  };
 
-  return async function getSolutions(items, options = {}) {
+  const getSolutions = async (items, options = {}) => {
     if (!Array.isArray(items)) {
       throw new TypeError('Items must be an array');
     }
@@ -85,4 +85,5 @@ export function createSolutionManager({
       await browser.close();
     }
   };
-}
+  return getSolutions;
+};

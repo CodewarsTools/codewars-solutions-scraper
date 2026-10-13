@@ -1,8 +1,8 @@
 import puppeteer from 'puppeteer';
 
-export function launchBrowser(options = {}) {
+export const launchBrowser = (options = {}) => {
   return puppeteer.launch({
     headless: true,
     ...options,
   });
-}
+};
