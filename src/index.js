@@ -1,2 +1,1 @@
-
-export { getSolutions } from './solution-manager.js';
+export { getSolutions } from './loader.js';
