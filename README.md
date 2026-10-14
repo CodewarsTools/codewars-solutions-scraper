@@ -1,4 +1,4 @@
-# Codewars Solutions Scraper
+# сodewars-solutions-scraper
 
 A Node.js library for extracting your own solution code from [Codewars](https://www.codewars.com/) using Puppeteer.
 
