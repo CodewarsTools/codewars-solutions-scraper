@@ -1,6 +1,6 @@
 {
   "name": "@codewarstools/codewars-solutions-scraper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Scrape Codewars solutions from multiple URLs using Puppeteer.",
   "type": "module",
   "exports": "./src/index.js",
