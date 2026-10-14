@@ -19,20 +19,21 @@ A Node.js library for extracting your own solution code from [Codewars](https://
 
 ## Installation
 
-Clone the repository and install its dependencies:
+Install the package from npm:
 
 ```bash
-git clone https://github.com/AndriiKot/codewars-solutions-scraper.git
-cd codewars-solutions-scraper
-npm install
+npm install @codewarstools/codewars-solutions-scraper
 ```
+
+The package requires Node.js 20 or later.
+
 
 ## Usage
 
 Import `getSolutions` and provide an array of kata objects, an authentication token, and optional browser settings.
 
 ```js
-import { getSolutions } from './src/index.js';
+import { getSolutions } from '@codewarstools/codewars-solutions-scraper';
 
 const katas = [
   {
