@@ -1,5 +1,7 @@
 # сodewars-solutions-scraper
 
+[![npm version](https://img.shields.io/npm/v/@codewarstools/codewars-solutions-scraper)](https://www.npmjs.com/package/@codewarstools/codewars-solutions-scraper)
+
 A Node.js library for extracting your own solution code from [Codewars](https://www.codewars.com/) using Puppeteer.
 
 ## Features
@@ -19,7 +21,7 @@ A Node.js library for extracting your own solution code from [Codewars](https://
 
 ## Installation
 
-Install the package from npm:
+Install the package from [npm](https://www.npmjs.com/package/@codewarstools/codewars-solutions-scraper):
 
 ```bash
 npm install @codewarstools/codewars-solutions-scraper
