@@ -15,7 +15,7 @@ A Node.js library for extracting your own solution code from [Codewars](https://
 
 - Node.js 20 or later.
 - A Codewars account.
-- A valid `remember_user_token` cookie.
+- A valid `remember_user_token` cookie to access your solutions.
 
 ## Installation
 
@@ -47,6 +47,7 @@ const katas = [
 ];
 
 const results = await getSolutions(katas, {
+  // Read the authentication token from an environment variable.
   rememberUserToken: process.env.CODEWARS_TOKEN,
   browser: {
     headless: false,
@@ -58,7 +59,7 @@ console.dir(results, { depth: null });
 
 The library generates solution URLs from the supplied kata IDs and language identifiers.
 
-The example uses the `CODEWARS_TOKEN` environment variable to provide the authentication token. This is a suggested approach, not a requirement. Users are responsible for obtaining the token and supplying it securely.
+The example reads the authentication token from the `CODEWARS_TOKEN` environment variable. See [Authentication](#authentication) for other ways to provide the token securely.
 
 The `browser.headless` option controls whether the browser runs in headless mode:
 
@@ -136,11 +137,98 @@ The examples illustrate the result structure. Actual error codes and messages de
 
 The library uses the Codewars `remember_user_token` cookie to authenticate and access your solutions.
 
-You can find this cookie in your browser's developer tools under **Application → Cookies → `https://www.codewars.com`**.
+The package does not automatically obtain, store, refresh, or manage authentication tokens. The application using the package is responsible for obtaining a valid token and providing it through the `rememberUserToken` option.
 
-The token must be valid and may need to be refreshed if it expires or becomes invalid.
+You can choose the approach that best fits your application.
 
-**Security:** Treat your authentication token like a password. Never commit a valid token to a Git repository or expose it in source code, configuration files, logs, or documentation. If you use an environment variable or a `.env` file, ensure that secrets are excluded from version control. If a token is accidentally exposed, invalidate or refresh it as soon as possible.
+### Option 1: Environment variable
+
+Read the token from an environment variable:
+
+```js
+const results = await getSolutions(katas, {
+  rememberUserToken: process.env.CODEWARS_TOKEN,
+});
+```
+
+For local development, you can define the variable in a `.env` file:
+
+```dotenv
+CODEWARS_TOKEN=your_remember_user_token
+```
+
+With Node.js 20.6 or later, load it using:
+
+```bash
+node --env-file=.env app.js
+```
+
+Add `.env` to `.gitignore` to prevent accidentally committing the token.
+
+### Option 2: GitHub Actions secrets
+
+For automated workflows, store the token in a GitHub repository secret.
+
+1. Open your repository settings.
+2. Navigate to **Secrets and variables → Actions**.
+3. Create a repository secret named `CODEWARS_TOKEN`.
+
+Pass it to your application through an environment variable:
+
+```yaml
+steps:
+  - name: Fetch Codewars solutions
+    env:
+      CODEWARS_TOKEN: ${{ secrets.CODEWARS_TOKEN }}
+    run: node app.js
+```
+
+Your application can then access it through `process.env.CODEWARS_TOKEN`.
+
+Do not print secrets in workflow logs or expose them to untrusted code.
+
+### Option 3: Operating system environment variables
+
+You can set the variable directly in your terminal.
+
+PowerShell:
+
+```powershell
+$env:CODEWARS_TOKEN = "your_remember_user_token"
+node app.js
+```
+
+Linux or macOS:
+
+```bash
+export CODEWARS_TOKEN="your_remember_user_token"
+node app.js
+```
+
+### Option 4: Secret managers
+
+For production applications, you can retrieve the token from a secret-management service or your deployment platform's secret store. Pass the retrieved value to `getSolutions()` through `rememberUserToken`.
+
+### Obtaining the token
+
+You can find the `remember_user_token` cookie in your browser's developer tools under **Application → Cookies → `https://www.codewars.com`**.
+
+Copy the cookie's value and pass it to `getSolutions()` through the `rememberUserToken` option. The token must be valid and may need to be replaced if it expires or becomes invalid.
+
+Treat this value as a secret because it can provide access to your Codewars account. Never share it or commit it to a repository.
+
+### Security
+
+Treat your authentication token like a password.
+
+- Never commit a real token to a Git repository.
+- Do not hardcode tokens in source code or documentation.
+- Do not print tokens in application or CI logs.
+- Exclude local `.env` files from version control.
+- Restrict access to secrets in automated workflows.
+- If a token is accidentally exposed, invalidate or refresh it as soon as possible.
+
+The package does not require a specific token-management approach. Choose the method that best fits your application and deployment environment.
 
 ## Error Handling
 
