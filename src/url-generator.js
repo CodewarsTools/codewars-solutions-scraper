@@ -58,6 +58,15 @@ export const createUrlGenerator = ({
         throw error;
       }
 
+      if (!/^[a-z]+$/.test(language)) {
+        const error = new TypeError(
+          `Invalid language "${language}": expected lowercase letters a-z only`,
+        );
+
+        error.code = ERROR_CODES.INVALID_INPUT;
+        throw error;
+      }
+
       if (!SUPPORTED_LANGUAGES.includes(language)) {
         const error = new RangeError(
           `Unsupported language "${language}".`,
