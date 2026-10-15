@@ -26,6 +26,7 @@ const getSolution = createSolution({
 const createSolutionResult = solutionResult.createSolutionResult;
 
 const buildSolutionUrls = createUrlGenerator({
+  ERROR_CODES: errors.ERROR_CODES,
   BASE_URL: constants.BASE_URL,
   SUPPORTED_LANGUAGES: LANGUAGES,
   createSolutionResult,
