@@ -9,3 +9,6 @@ export const AUTH_COOKIE = {
   path: '/',
   secure: true,
 };
+
+export const NAVIGATION_TIMEOUT = 30_000;
+export const SOLUTION_SELECTOR_TIMEOUT = 10_000;

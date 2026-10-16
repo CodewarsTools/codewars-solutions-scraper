@@ -3,6 +3,8 @@ export const createSolution = ({
   createAuthenticationFailedError,
   createSolutionsLockedError,
   createSolutionNotFoundError,
+  NAVIGATION_TIMEOUT,
+  SOLUTION_SELECTOR_TIMEOUT,
   SOLUTION_SELECTOR,
   SOLUTIONS_LOCKED_SELECTOR,
   SIGN_IN_SELECTOR,
@@ -11,10 +13,10 @@ export const createSolution = ({
     try {
       await page.goto(url, {
         waitUntil: 'domcontentloaded',
-        timeout: 30_000,
+        timeout: NAVIGATION_TIMEOUT,
       });
     } catch (cause) {
-      throw createNavigationError(cause);
+      throw createNavigationError(cause, NAVIGATION_TIMEOUT);
     }
 
     if (await page.$(SIGN_IN_SELECTOR)) {
@@ -27,17 +29,20 @@ export const createSolution = ({
 
     try {
       await page.waitForSelector(SOLUTION_SELECTOR, {
-        timeout: 10_000,
+        timeout: SOLUTION_SELECTOR_TIMEOUT,
       });
     } catch (cause) {
       if (cause?.name !== 'TimeoutError') {
         throw cause;
       }
 
-      throw createSolutionNotFoundError(cause);
+      throw createSolutionNotFoundError(cause, SOLUTION_SELECTOR_TIMEOUT);
     }
 
-    return page.$eval(SOLUTION_SELECTOR, (element) => element.textContent);
+    return page.$eval(
+      SOLUTION_SELECTOR,
+      (element) => element.textContent,
+    );
   };
 
   return getSolution;

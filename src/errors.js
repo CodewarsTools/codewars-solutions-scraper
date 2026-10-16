@@ -77,10 +77,13 @@ export const createNetworkError = (cause) =>
     cause,
   });
 
-export const createNavigationTimeoutError = (cause) =>
+export const createNavigationTimeoutError = (
+  cause,
+  NAVIGATION_TIMEOUT,
+) =>
   createScraperError({
     code: ERROR_CODES.NAVIGATION_TIMEOUT,
-    message: 'Navigation timed out after 30000 ms',
+    message: `Navigation timed out after ${NAVIGATION_TIMEOUT} ms`,
     cause,
   });
 
@@ -91,9 +94,12 @@ export const createNavigationFailedError = (cause) =>
     cause,
   });
 
-export const createNavigationError = (cause) => {
+export const createNavigationError = (
+  cause,
+  NAVIGATION_TIMEOUT,
+) => {
   if (cause?.name === 'TimeoutError') {
-    return createNavigationTimeoutError(cause);
+    return createNavigationTimeoutError(cause, NAVIGATION_TIMEOUT);
   }
 
   if (isNetworkError(cause)) {
@@ -103,10 +109,13 @@ export const createNavigationError = (cause) => {
   return createNavigationFailedError(cause);
 };
 
-export const createSolutionNotFoundError = (cause) =>
+export const createSolutionNotFoundError = (
+  cause,
+  SOLUTION_SELECTOR_TIMEOUT,
+) =>
   createScraperError({
     code: ERROR_CODES.SOLUTION_NOT_FOUND,
-    message: 'Solution not found',
+    message: `Solution not found after waiting ${SOLUTION_SELECTOR_TIMEOUT} ms`,
     cause,
   });
 

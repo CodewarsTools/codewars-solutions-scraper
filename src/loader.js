@@ -12,8 +12,7 @@ import { createSolutionManager } from './solution-manager.js';
 import { createUrlGenerator } from './url-generator.js';
 
 const authenticate = createAuthentication({
-  createAuthenticationRequiredError:
-    errors.createAuthenticationRequiredError,
+  createAuthenticationRequiredError: errors.createAuthenticationRequiredError,
   AUTH_COOKIE: constants.AUTH_COOKIE,
 });
 
@@ -22,6 +21,8 @@ const getSolution = createSolution({
   createAuthenticationFailedError: errors.createAuthenticationFailedError,
   createSolutionsLockedError: errors.createSolutionsLockedError,
   createSolutionNotFoundError: errors.createSolutionNotFoundError,
+  NAVIGATION_TIMEOUT: constants.NAVIGATION_TIMEOUT,
+  SOLUTION_SELECTOR_TIMEOUT: constants.SOLUTION_SELECTOR_TIMEOUT,
   ...selectors,
 });
 
