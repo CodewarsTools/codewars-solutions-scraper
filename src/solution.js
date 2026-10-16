@@ -1,6 +1,7 @@
 export const createSolution = ({
   ERROR_CODES,
   createScraperError,
+  createNavigationError,
   SOLUTION_SELECTOR,
   SOLUTIONS_LOCKED_SELECTOR,
   SIGN_IN_SELECTOR,
@@ -12,11 +13,7 @@ export const createSolution = ({
         timeout: 30_000,
       });
     } catch (cause) {
-      throw createScraperError({
-        code: ERROR_CODES.NAVIGATION_FAILED,
-        message: 'Failed to navigate to the solution page',
-        cause,
-      });
+      throw createNavigationError(cause);
     }
 
     if (await page.$(SIGN_IN_SELECTOR)) {
