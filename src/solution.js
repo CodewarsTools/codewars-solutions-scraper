@@ -1,7 +1,8 @@
 export const createSolution = ({
-  ERROR_CODES,
-  createScraperError,
   createNavigationError,
+  createAuthenticationFailedError,
+  createSolutionsLockedError,
+  createSolutionNotFoundError,
   SOLUTION_SELECTOR,
   SOLUTIONS_LOCKED_SELECTOR,
   SIGN_IN_SELECTOR,
@@ -17,18 +18,11 @@ export const createSolution = ({
     }
 
     if (await page.$(SIGN_IN_SELECTOR)) {
-      throw createScraperError({
-        code: ERROR_CODES.AUTHENTICATION_FAILED,
-        message: 'Authentication failed. Check your remember_user_token.',
-      });
+      throw createAuthenticationFailedError();
     }
 
     if (await page.$(SOLUTIONS_LOCKED_SELECTOR)) {
-      throw createScraperError({
-        code: ERROR_CODES.SOLUTIONS_LOCKED,
-        message:
-          'Solutions are locked. This may be because you have not solved this kata yet. Unlocking the solutions will forfeit your eligibility for this kata.',
-      });
+      throw createSolutionsLockedError();
     }
 
     try {
@@ -40,11 +34,7 @@ export const createSolution = ({
         throw cause;
       }
 
-      throw createScraperError({
-        code: ERROR_CODES.SOLUTION_NOT_FOUND,
-        message: 'Solution not found',
-        cause,
-      });
+      throw createSolutionNotFoundError(cause);
     }
 
     return page.$eval(SOLUTION_SELECTOR, (element) => element.textContent);

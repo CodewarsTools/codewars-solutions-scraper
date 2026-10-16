@@ -18,9 +18,10 @@ const authenticate = createAuthentication({
 });
 
 const getSolution = createSolution({
-  ERROR_CODES: errors.ERROR_CODES,
-  createScraperError: errors.createScraperError,
   createNavigationError: errors.createNavigationError,
+  createAuthenticationFailedError: errors.createAuthenticationFailedError,
+  createSolutionsLockedError: errors.createSolutionsLockedError,
+  createSolutionNotFoundError: errors.createSolutionNotFoundError,
   ...selectors,
 });
 

@@ -49,6 +49,27 @@ const isNetworkError = (error) => {
   );
 };
 
+export const createAuthenticationRequiredError = () =>
+  createScraperError({
+    code: ERROR_CODES.AUTHENTICATION_REQUIRED,
+    message:
+      'Authentication is required. Provide a valid remember_user_token.',
+  });
+
+export const createAuthenticationFailedError = (cause) =>
+  createScraperError({
+    code: ERROR_CODES.AUTHENTICATION_FAILED,
+    message: 'Authentication failed. Check your remember_user_token.',
+    cause,
+  });
+
+export const createSolutionsLockedError = () =>
+  createScraperError({
+    code: ERROR_CODES.SOLUTIONS_LOCKED,
+    message:
+      'Solutions are locked. This may be because you have not solved this kata yet. Unlocking the solutions will forfeit your eligibility for this kata.',
+  });
+
 export const createNetworkError = (cause) =>
   createScraperError({
     code: ERROR_CODES.NETWORK_ERROR,
@@ -82,17 +103,10 @@ export const createNavigationError = (cause) => {
   return createNavigationFailedError(cause);
 };
 
-export const createAuthenticationRequiredError = () =>
+export const createSolutionNotFoundError = (cause) =>
   createScraperError({
-    code: ERROR_CODES.AUTHENTICATION_REQUIRED,
-    message:
-      'Authentication is required. Provide a valid remember_user_token.',
-  });
-
-export const createAuthenticationFailedError = (cause) =>
-  createScraperError({
-    code: ERROR_CODES.AUTHENTICATION_FAILED,
-    message: 'Authentication failed. Check your remember_user_token.',
+    code: ERROR_CODES.SOLUTION_NOT_FOUND,
+    message: 'Solution not found',
     cause,
   });
 
