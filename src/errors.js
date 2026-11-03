@@ -49,13 +49,6 @@ const isNetworkError = (error) => {
   );
 };
 
-export const createAuthenticationRequiredError = () =>
-  createScraperError({
-    code: ERROR_CODES.AUTHENTICATION_REQUIRED,
-    message:
-      'Authentication is required. Provide a valid remember_user_token.',
-  });
-
 export const createAuthenticationFailedError = (cause) =>
   createScraperError({
     code: ERROR_CODES.AUTHENTICATION_FAILED,

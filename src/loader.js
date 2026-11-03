@@ -1,5 +1,7 @@
 import LANGUAGES from '@codewarstools/codewars-languages';
 
+import ERRORS from './errors/errors.json' with { type: 'json' };
+
 import * as constants from './constants.js';
 import * as errors from './errors.js';
 import * as selectors from './selectors.js';
@@ -10,10 +12,13 @@ import { createAuthentication } from './authentication.js';
 import { createSolution } from './solution.js';
 import { createSolutionManager } from './solution-manager.js';
 import { createUrlGenerator } from './url-generator.js';
+import { createValidateToken } from './validateToken.js';
+
+import { ScraperError } from './errors.js';
 
 const authenticate = createAuthentication({
-  createAuthenticationRequiredError: errors.createAuthenticationRequiredError,
   AUTH_COOKIE: constants.AUTH_COOKIE,
+  validate: createValidateToken({ ERRORS, ScraperError }),
 });
 
 const getSolution = createSolution({
