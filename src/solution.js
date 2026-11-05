@@ -25,7 +25,7 @@ export const createSolution = ({
     }
 
     if (await page.$(SOLUTIONS_LOCKED_SELECTOR)) {
-      throw createSolutionsLockedError();
+      throw error('SOLUTIONS_LOCKED');
     }
 
     try {

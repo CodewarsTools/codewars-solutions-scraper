@@ -19,6 +19,6 @@
   "NAVIGATION_FAILED": "Failed to navigate to the solution page.",
   "SELECTOR_TIMEOUT": "Timed out waiting for the specified selector to appear.",
   "SOLUTION_NOT_FOUND": "No solution was found for the specified kata and language.",
-  "SOLUTIONS_LOCKED": "Solutions are locked. Authentication is required to access them.",
+  "SOLUTIONS_LOCKED": "Solutions are locked. This may be because you have not solved this kata yet. Unlocking the solutions will forfeit your eligibility for this kata.",
   "UNKNOWN_ERROR": "An unexpected error occurred."
 }
