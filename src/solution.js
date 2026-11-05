@@ -36,8 +36,7 @@ export const createSolution = ({
       if (cause?.name !== 'TimeoutError') {
         throw cause;
       }
-
-      throw createSolutionNotFoundError(cause, SOLUTION_SELECTOR_TIMEOUT);
+      throw error('SOLUTION_NOT_FOUND', { cause });
     }
 
     return page.$eval(
