@@ -1,4 +1,5 @@
 export const createSolution = ({
+  error,
   createNavigationError,
   createAuthenticationFailedError,
   createSolutionsLockedError,
@@ -20,7 +21,7 @@ export const createSolution = ({
     }
 
     if (await page.$(SIGN_IN_SELECTOR)) {
-      throw createAuthenticationFailedError();
+      throw error('AUTHENTICATION_FAILED');
     }
 
     if (await page.$(SOLUTIONS_LOCKED_SELECTOR)) {

@@ -49,13 +49,6 @@ const isNetworkError = (error) => {
   );
 };
 
-export const createAuthenticationFailedError = (cause) =>
-  createScraperError({
-    code: ERROR_CODES.AUTHENTICATION_FAILED,
-    message: 'Authentication failed. Check your remember_user_token.',
-    cause,
-  });
-
 export const createSolutionsLockedError = () =>
   createScraperError({
     code: ERROR_CODES.SOLUTIONS_LOCKED,
