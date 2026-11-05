@@ -1,6 +1,8 @@
 import LANGUAGES from '@codewarstools/codewars-languages';
 
 import ERRORS from './errors/errors.json' with { type: 'json' };
+import { createError } from './errors/createError.js';
+
 
 import * as constants from './constants.js';
 import * as errors from './errors.js';
@@ -16,12 +18,20 @@ import { createValidateToken } from './validateToken.js';
 
 import { ScraperError } from './errors.js';
 
+const scraperError = createError({
+  ERRORS,
+  ScraperError,
+});
+
 const authenticate = createAuthentication({
   AUTH_COOKIE: constants.AUTH_COOKIE,
   validate: createValidateToken({ ERRORS, ScraperError }),
 });
 
 const getSolution = createSolution({
+  error: scraperError,
+  ScraperError,
+  ERRORS,
   createNavigationError: errors.createNavigationError,
   createAuthenticationFailedError: errors.createAuthenticationFailedError,
   createSolutionsLockedError: errors.createSolutionsLockedError,
