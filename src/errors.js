@@ -49,12 +49,6 @@ const isNetworkError = (error) => {
   );
 };
 
-export const createSolutionsLockedError = () =>
-  createScraperError({
-    code: ERROR_CODES.SOLUTIONS_LOCKED,
-    message:
-      'Solutions are locked. This may be because you have not solved this kata yet. Unlocking the solutions will forfeit your eligibility for this kata.',
-  });
 
 export const createNetworkError = (cause) =>
   createScraperError({
@@ -95,15 +89,6 @@ export const createNavigationError = (
   return createNavigationFailedError(cause);
 };
 
-export const createSolutionNotFoundError = (
-  cause,
-  SOLUTION_SELECTOR_TIMEOUT,
-) =>
-  createScraperError({
-    code: ERROR_CODES.SOLUTION_NOT_FOUND,
-    message: `Solution not found after waiting ${SOLUTION_SELECTOR_TIMEOUT} ms`,
-    cause,
-  });
 
 export const createErrorResult = (error) => {
   if (error instanceof ScraperError) {

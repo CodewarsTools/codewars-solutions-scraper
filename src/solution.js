@@ -1,9 +1,6 @@
 export const createSolution = ({
   error,
   createNavigationError,
-  createAuthenticationFailedError,
-  createSolutionsLockedError,
-  createSolutionNotFoundError,
   NAVIGATION_TIMEOUT,
   SOLUTION_SELECTOR_TIMEOUT,
   SOLUTION_SELECTOR,
