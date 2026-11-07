@@ -35,8 +35,11 @@ export class ScraperError extends Error {
   }
 }
 
-export const createScraperError = (options) =>
-  new ScraperError(options);
+import { createError } from './errors/createError.js';
+import error_code from './errors/errors.json' with { type: 'json' };
+
+const error = createError({ ERRORS: error_code, ScraperError });
+
 
 const isNetworkError = (error) => {
   const message = `${error?.message ?? error}`;
@@ -50,22 +53,20 @@ const isNetworkError = (error) => {
 };
 
 
-export const createNetworkError = (cause) =>
-  createScraperError({
-    code: ERROR_CODES.NETWORK_ERROR,
+export const createNetworkError = (cause) => {
+  return createScraperError({
+    code: ERROR_CODES,
     message: `Failed to navigate to the solution page: ${cause?.message ?? cause}`,
     cause,
-  });
+  })
+};
 
 export const createNavigationTimeoutError = (
   cause,
   NAVIGATION_TIMEOUT,
-) =>
-  createScraperError({
-    code: ERROR_CODES.NAVIGATION_TIMEOUT,
-    message: `Navigation timed out after ${NAVIGATION_TIMEOUT} ms`,
-    cause,
-  });
+) => { 
+  return error('NAVIGATION_TIMEOUT', { cause });
+}
 
 export const createNavigationFailedError = (cause) =>
   createScraperError({
@@ -79,14 +80,14 @@ export const createNavigationError = (
   NAVIGATION_TIMEOUT,
 ) => {
   if (cause?.name === 'TimeoutError') {
-    return createNavigationTimeoutError(cause, NAVIGATION_TIMEOUT);
+    return error('NAVIGATION_TIMEOUT', { cause });
   }
 
   if (isNetworkError(cause)) {
     return createNetworkError(cause);
   }
 
-  return createNavigationFailedError(cause);
+  return error('NAVIGATION_FAILED', { cause });
 };
 
 

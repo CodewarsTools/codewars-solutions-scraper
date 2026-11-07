@@ -16,7 +16,7 @@
   "NETWORK_ERROR": "A network error occurred while accessing the solution page.",
   "INVALID_TIMEOUT_TYPE": "Invalid timeout. Expected a number.",
   "NAVIGATION_TIMEOUT": "Navigation to the solution page timed out.",
-  "NAVIGATION_FAILED": "Failed to navigate to the solution page.",
+  "NAVIGATION_FAILED": "QQFailed to navigate to the solution page.",
   "SELECTOR_TIMEOUT": "Timed out waiting for the specified selector to appear.",
   "SOLUTION_NOT_FOUND": "No solution was found for the specified kata and language.",
   "SOLUTIONS_LOCKED": "Solutions are locked. This may be because you have not solved this kata yet. Unlocking the solutions will forfeit your eligibility for this kata.",
