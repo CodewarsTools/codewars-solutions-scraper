@@ -17,8 +17,6 @@ export const createSolution = ({
       throw createNavigationError(cause, NAVIGATION_TIMEOUT);
     }
 
-    throw createNavigationError('cause navaigationError', NAVIGATION_TIMEOUT);
-
     if (await page.$(SIGN_IN_SELECTOR)) {
       throw error('AUTHENTICATION_FAILED');
     }

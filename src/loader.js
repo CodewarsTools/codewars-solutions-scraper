@@ -16,7 +16,7 @@ import { createSolutionManager } from './solution-manager.js';
 import { createUrlGenerator } from './url-generator.js';
 import { createValidateToken } from './validateToken.js';
 
-import { ScraperError } from './errors.js';
+import { ScraperError } from './errors/scraperError.js';
 
 const scraperError = createError({
   ERRORS,
