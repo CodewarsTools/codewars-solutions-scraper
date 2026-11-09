@@ -1,60 +1,48 @@
 import LANGUAGES from '@codewarstools/codewars-languages';
 
-import ERRORS from './errors/errors.json' with { type: 'json' };
-import { createError } from './errors/createError.js';
-
-
 import * as constants from './constants.js';
-import * as errors from './errors.js';
 import * as selectors from './selectors.js';
 import * as solutionResult from './solution-result.js';
 
 import { launchBrowser } from './browser.js';
-import { createAuthentication } from './authentication.js';
 import { createSolution } from './solution.js';
 import { createSolutionManager } from './solution-manager.js';
+import { createSolutionResult } from './solution-result.js';
 import { createUrlGenerator } from './url-generator.js';
 import { createValidateToken } from './validateToken.js';
+import { createAuthentication } from './authentication.js';
 
-import { ScraperError } from './errors/scraperError.js';
+import { error, errorResult } from './errors/index.js';
 
-const scraperError = createError({
-  ERRORS,
-  ScraperError,
-});
+import { isNetworkError } from './utils/isNetworkError.js';
+
 
 const authenticate = createAuthentication({
   AUTH_COOKIE: constants.AUTH_COOKIE,
-  validate: createValidateToken({ ERRORS, ScraperError }),
+  validate: createValidateToken(error),
 });
 
 const getSolution = createSolution({
-  error: scraperError,
-  ScraperError,
-  ERRORS,
-  createNavigationError: errors.createNavigationError,
-  createAuthenticationFailedError: errors.createAuthenticationFailedError,
-  createSolutionsLockedError: errors.createSolutionsLockedError,
-  createSolutionNotFoundError: errors.createSolutionNotFoundError,
-  NAVIGATION_TIMEOUT: constants.NAVIGATION_TIMEOUT,
-  SOLUTION_SELECTOR_TIMEOUT: constants.SOLUTION_SELECTOR_TIMEOUT,
+  isNetworkError,
+  error,
+  ...constants,
   ...selectors,
 });
-
-const createSolutionResult = solutionResult.createSolutionResult;
+              
 
 const buildSolutionUrls = createUrlGenerator({
-  ERROR_CODES: errors.ERROR_CODES,
+  error,
   BASE_URL: constants.BASE_URL,
   SUPPORTED_LANGUAGES: LANGUAGES,
   createSolutionResult,
 });
+
 
 export const getSolutions = createSolutionManager({
   launchBrowser,
   authenticate,
   getSolution,
   buildSolutionUrls,
-  createErrorResult: errors.createErrorResult,
+  errorResult,
   createSolutionResult,
 });

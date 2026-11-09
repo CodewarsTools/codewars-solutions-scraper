@@ -1,28 +1,17 @@
-export const createValidateToken = ({ ERRORS, ScraperError }) => {
+export const createValidateToken = (error) => {
   return (token) => {
-    const invalidType = 'INVALID_TOKEN_TYPE';
-    const empty = 'EMPTY_TOKEN';
-    const invalidChars = 'INVALID_TOKEN_CHARACTERS';
 
     if (typeof token !== 'string') {
-      throw new ScraperError({
-        code: invalidType,
-        message: ERRORS[invalidType],
-      });
+      throw error('INVALID_TOKEN_TYPE');
     }
 
     if (!token.trim()) {
-      throw new ScraperError({
-        code: empty,
-        message: ERRORS[empty],
-      });
+      throw error('EMPTY_TOKEN');
     }
 
     if (/\s/.test(token)) {
-      throw new ScraperError({
-        code: invalidChars,
-        message: ERRORS[invalidChars],
-      });
+      throw error('INVALID_TOKEN_CHARACTERS');
     }
+
   };
 };

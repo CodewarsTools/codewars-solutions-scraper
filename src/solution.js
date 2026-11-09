@@ -1,20 +1,28 @@
 export const createSolution = ({
   error,
-  createNavigationError,
+  isNetworkError,
   NAVIGATION_TIMEOUT,
   SOLUTION_SELECTOR_TIMEOUT,
   SOLUTION_SELECTOR,
   SOLUTIONS_LOCKED_SELECTOR,
   SIGN_IN_SELECTOR,
 }) => {
-  const getSolution = async (page, url) => {
+  return async (page, url) => {
     try {
       await page.goto(url, {
         waitUntil: 'domcontentloaded',
         timeout: NAVIGATION_TIMEOUT,
       });
     } catch (cause) {
-      throw createNavigationError(cause, NAVIGATION_TIMEOUT);
+      if (cause?.name === 'TimeoutError') {
+        throw error('NAVIGATION_TIMEOUT', { cause });
+      }
+
+      if (isNetworkError(cause)) {
+        throw error('NETWORK_ERROR', { cause });
+      }
+
+      throw error('NAVIGATION_FAILED', { cause });
     }
 
     if (await page.$(SIGN_IN_SELECTOR)) {
@@ -41,6 +49,4 @@ export const createSolution = ({
       (element) => element.textContent,
     );
   };
-
-  return getSolution;
 };

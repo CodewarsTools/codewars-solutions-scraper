@@ -3,7 +3,7 @@ export const createSolutionManager = ({
   authenticate,
   getSolution,
   buildSolutionUrls,
-  createErrorResult,
+  errorResult,
   createSolutionResult,
 }) => {
   const processUrl = async (page, item) => {
@@ -21,7 +21,7 @@ export const createSolutionManager = ({
         ...item,
         success: false,
         data: [],
-        error: [createErrorResult(error)],
+        error: [errorResult(error)],
       });
     }
   };
@@ -53,7 +53,7 @@ export const createSolutionManager = ({
       try {
         await authenticate(page, options.rememberUserToken);
       } catch (error) {
-        const authError = createErrorResult(error);
+        const authError = errorResult(error);
 
         return results.map((result) => {
           if (!result.url || result.error.length > 0) {

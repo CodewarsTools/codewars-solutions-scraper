@@ -1,7 +1,7 @@
 export const createUrlGenerator = ({
+  error,
   BASE_URL,
   SUPPORTED_LANGUAGES,
-  ERROR_CODES,
   createSolutionResult,
 }) => {
   const buildSolutionUrl = (item) => {
@@ -13,9 +13,7 @@ export const createUrlGenerator = ({
         item === null ||
         Array.isArray(item)
       ) {
-        throw new TypeError(
-          `Invalid item "${String(item)}": expected an object`,
-        );
+        throw error('INVALID_ITEM');
       }
 
       const { kataId, language } = item;
@@ -26,62 +24,42 @@ export const createUrlGenerator = ({
 
       if (typeof language === 'string') {
         result.language = language;
-      } else if (language !== undefined && language !== null) {
-        result.error.push({
-          code: ERROR_CODES.INVALID_INPUT,
-          message: `Invalid language: expected a non-empty string, received ${
-            Array.isArray(language) ? 'array' : typeof language
-          } (${JSON.stringify(language)})`,
-        });
-
-        return result;
       }
 
-      if (typeof kataId !== 'string' || !kataId.trim()) {
-        throw new TypeError(
-          `Invalid kataId "${String(kataId)}": expected a non-empty string`,
-        );
+      if (typeof kataId !== 'string') {
+        throw error('INVALID_KATA_ID_TYPE');
       }
 
-      if (typeof language !== 'string' || !language.trim()) {
-        throw new TypeError(
-          `Invalid language "${String(language)}": expected a non-empty string`,
-        );
+      if (!kataId.trim()) {
+        throw error('EMPTY_KATA_ID');
+      }
+
+      if (typeof language !== 'string') {
+        throw error('INVALID_LANGUAGE_TYPE');
+      }
+
+      if (!language.trim()) {
+        throw error('EMPTY_LANGUAGE');
       }
 
       if (language !== language.toLowerCase()) {
-        const error = new TypeError(
-          `Invalid language "${language}": expected a lowercase language identifier`,
-        );
-
-        error.code = ERROR_CODES.INVALID_LANGUAGE_CASE;
-        throw error;
+        throw error('INVALID_LANGUAGE_CASE');
       }
 
       if (!/^[a-z]+$/.test(language)) {
-        const error = new TypeError(
-          `Invalid language "${language}": expected lowercase letters a-z only`,
-        );
-
-        error.code = ERROR_CODES.INVALID_INPUT;
-        throw error;
+        throw error('INVALID_LANGUAGE_FORMAT');
       }
 
       if (!SUPPORTED_LANGUAGES.includes(language)) {
-        const error = new RangeError(
-          `Unsupported language "${language}".`,
-        );
-
-        error.code = ERROR_CODES.UNSUPPORTED_LANGUAGE;
-        throw error;
+        throw error('UNSUPPORTED_LANGUAGE');
       }
 
       result.url =
         `${BASE_URL}/kata/${kataId}/solutions/${language}?filter=me`;
-    } catch (error) {
+    } catch (cause) {
       result.error.push({
-        code: error.code ?? ERROR_CODES.INVALID_INPUT,
-        message: error.message,
+        code: cause.code,
+        message: cause.message,
       });
     }
 
@@ -90,9 +68,7 @@ export const createUrlGenerator = ({
 
   const buildSolutionUrls = (items) => {
     if (!Array.isArray(items)) {
-      throw new TypeError(
-        `Invalid items "${String(items)}": expected an array`,
-      );
+      throw error('INVALID_INPUT');
     }
 
     return items.map(buildSolutionUrl);
