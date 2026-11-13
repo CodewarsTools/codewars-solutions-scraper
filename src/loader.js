@@ -1,4 +1,5 @@
 import LANGUAGES from '@codewarstools/codewars-languages';
+import error from '@codewarstools/scraper-errors';
 
 import * as constants from './constants.js';
 import * as selectors from './selectors.js';
@@ -11,10 +12,8 @@ import { createSolutionResult } from './solution-result.js';
 import { createUrlGenerator } from './url-generator.js';
 import { createValidateToken } from './validateToken.js';
 import { createAuthentication } from './authentication.js';
-
-import { error, errorResult } from './errors/index.js';
-
 import { isNetworkError } from './utils/isNetworkError.js';
+import { errorResult } from './errorResult.js';
 
 
 const authenticate = createAuthentication({
